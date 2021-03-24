@@ -48,61 +48,30 @@ function obterEndereco(idUsuario, callback){
 
 }
 
-// const usuarioPromise = obterUsuario()
-// usuarioPromise
-//     .then(function(usuario){
-//         return obterTelefone(usuario.id)
-//             .then(function (result){
-//                 return {
-//                     usuario: {
-//                         nome: usuario.nome,
-//                         id: usuario.id
-//                     },
-//                     telefone: result
-//                 }
-//             })
-//     })
-//     .then(function(resultado){
-//         const endereco = obterEnderecoAsync(resultado.usuario.id)
-//         return endereco.then(function(result){
-//             return {
-//                 usuario: resultado.usuario,
-//                 telefone: resultado.telefone,
-//                 endereco: result
-//             }
-//         })
-//     })
-//     .then(function(resultado){
-//         console.log('Resultado obtido: ', resultado)
-//     }).catch(function(error){
-//         console.log('Erro pego: ', error)
-//     })
+main()
+async function main(){
+    try{
 
-// obterUsuario(function resolverUsuario(error, usuario){
-//     if(error){
-//         console.error('Erro ao buscar Usuário', error)
-//         return
-//     }
-
-//     obterTelefone(usuario.id, function resolverTelefone(error1, telefone){
-//         if(error1){
-//             console.error('Erro ao buscar telefone', error1)
-//             return
-//         }
+        console.time('medida-promise')
+        const usuario = await obterUsuario()
         
-//         obterEndereco(usuario.id, function resolverEndereco(error2, endereco){
-//             if(error2){
-//                 console.log('Erro ao buscar endereço', error2);
-//                 return
-//             }
-            
-            // console.log(`
-            //     Nome: ${usuario.nome},
-            //     Endereço: ${endereco.rua}, nº ${endereco.numero},
-            //     Telefone: (${telefone.ddd}) ${telefone.telefone}
-            // `);
-//         })
+        const resultado = await Promise.all([
+            obterTelefone(usuario.id),
+            obterEnderecoAsync(usuario.id)
+        ])
 
-//     })
-// });
+        const endereco = resultado[1]
+        const telefone = resultado[0]
 
+        console.log(`
+            Nome: ${usuario.nome},
+            Telefone: (${telefone.ddd}) ${telefone.telefone},
+            Endereço: ${endereco.rua}, nº ${endereco.numero}
+        `)
+
+        console.timeEnd('medida-promise')
+
+    }catch(e){
+        console.error(e)
+    }
+}
