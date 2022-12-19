@@ -1,6 +1,2 @@
-04-lists/for-forin/node_modules/
-05-tests/01/node_modules/
-06-cli/node_modules/
-06-cli/package-lock.json
-08-multi-db-postgres/node_modules/
+*/node_modules/
 */package-lock.json
